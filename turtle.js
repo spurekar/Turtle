@@ -5,8 +5,8 @@ function main() {
 
 
 function init() {
-    H = window.innerHeight;
-    W = window.innerWidth;
+    H = window.innerHeight-100;
+    W = window.innerWidth-100;
 
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
@@ -16,6 +16,8 @@ function init() {
     ctx.fillRect(0,0,W,H);
 
     player = new Player();
+
+    addEventListener('keydown', keypress, false);
 };
 
 var Player = function() {
@@ -27,5 +29,42 @@ var Player = function() {
         img.src = 'Turtle.png';
         ctx.drawImage(img,xpos,ypos);
     }
+
+    this.moveLeft = function() {
+        console.log("left");
+    }
+    this.moveRight = function() {
+        console.log("right");
+    }
+    this.moveForward = function() {
+        console.log("forward");
+    }
+    this.moveReverse = function() {
+        console.log("reverse");
+    }
+    this.moveTurn = function() {
+        console.log("turn");
+    }
 };
 
+function keypress(e) { //e is event given by listener
+    switch (e.which) {
+        case 37: //left arrow
+            player.moveLeft();
+            break;
+        case 38: //up arrow
+            player.moveForward();
+            break;
+        case 39: //right arrow
+            player.moveRight();
+            break;
+        case 40: //down arrow
+            player.moveReverse();
+            break;
+        case 32: //spacebar
+            player.moveTurn();
+            break;
+        default:
+            break;
+    }
+};
