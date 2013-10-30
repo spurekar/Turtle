@@ -1,6 +1,9 @@
 ;
 
+pendown = true;
 deg = 0;
+H = 0;
+W = 0;
 
 function main() {
     init();
@@ -19,7 +22,7 @@ function init() {
     canvas.width = H;
     ctx.fillStyle = "#2E2E2E";
     ctx.fillRect(0,0,H,H);
-    
+
     //Create player
     player = new Player();
 
@@ -43,7 +46,7 @@ function draw() {
     ctx.fillStyle = "#2E2E2E";
     ctx.fillRect(0,0,canvas.width, canvas.height);
     ctx.translate(player.xpos,player.ypos);
-   
+
     //handle turns by rotating canvas
     ctx.rotate(deg*Math.PI/180);
     deg = 0;
@@ -51,11 +54,13 @@ function draw() {
 
     //draw turtle
     player.draw();
-
+    
+    if (pendown == true) {
     //draw path
-    ctx.lineTo(player.xpos,player.ypos);
-    ctx.stroke();
+        ctx.lineTo(player.xpos,player.ypos);
+    }
 
+    ctx.stroke();
     ctx.restore();
 };
 
@@ -87,6 +92,25 @@ var Player = function() {
     }
 };
 
+/*clearBtn = {
+    w: 100,
+    h: 50,
+    x: W - W/10,
+    y: H/10,
+
+    draw: function() {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = "2";
+        ctx.strokeRect(this.x,this.y,this.w,this.h);
+
+        ctx.font = "18px Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStlye = "white";
+        ctx.fillText("Clear", this.x, this.y );
+    }
+};*/
+
 function keypress(e) { //e is event given by listener
     switch (e.which) {
         case 37: //left arrow
@@ -103,9 +127,20 @@ function keypress(e) { //e is event given by listener
             break;
         case 32: //spacebar
             deg += 90;
-            console.log("turn" + deg);
+            console.log("turn");
+            break;
+        case 80: //p
+            if (pendown== true) {
+                pendown = false;
+            }
+            else { 
+                pendown = true;
+                ctx.moveTo(player.xpos,player.ypos);
+            }
+            console.log("pen changed");
             break;
         default:
             break;
     }
 };
+
