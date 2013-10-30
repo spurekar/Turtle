@@ -2,20 +2,32 @@
 
 pendown = true;
 deg = 0;
-H = 0;
-W = 0;
+mouse = {};
+
+window.requestAnimFrame = (function () {
+    return window.requestAnimationFrame || 
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame || 
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function( callback ){ 
+        return window.setTimeout(callback,1000/60); 
+    }; 
+})();
 
 function main() {
+    H = 0;
+    W = 0;
     init();
     gameLoop();
 };
 
 
 function init() {
-    H = window.innerHeight-100;
-    W = window.innerWidth-100;
+    H = window.innerHeight-50;
+    W = window.innerWidth-50;
 
-    //Set up canvas
+    //Set up main canvas
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
     canvas.height = H;
@@ -23,6 +35,14 @@ function init() {
     ctx.fillStyle = "#2E2E2E";
     ctx.fillRect(0,0,H,H);
 
+    //Set up button canvas
+    btncnvs = document.getElementById("btncnvs");
+    var tempstr = "-" + (canvas.height +4) + "px";
+    btncnvs.style.top = tempstr;
+    btns = btncnvs.getContext("2d");
+    btncnvs.height = H;
+    btncnvs.width = H;
+    
     //Create player
     player = new Player();
 
@@ -34,11 +54,13 @@ function init() {
 
     //Capture key presses
     addEventListener('keydown', keypress, false);
+    btncnvs.addEventListener('mousemove', trackPosition, false);
+    btncnvs.addEventListener('mousedown', btnClick, false);
 };
 
 function gameLoop() {
     draw();
-    setTimeout(gameLoop, 25);
+    requestAnimFrame(gameLoop);
 };
 
 function draw() {
@@ -59,9 +81,12 @@ function draw() {
     //draw path
         ctx.lineTo(player.xpos,player.ypos);
     }
-
     ctx.stroke();
+
+    clearBtn.draw();
+
     ctx.restore();
+    btns.restore();
 };
 
 var Player = function() {
@@ -92,24 +117,24 @@ var Player = function() {
     }
 };
 
-/*clearBtn = {
-    w: 100,
-    h: 50,
-    x: W - W/10,
-    y: H/10,
+clearBtn = {
+    w: 70,
+    h: 30,
+    x: 10,
+    y: 10,
 
     draw: function() {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = "2";
-        ctx.strokeRect(this.x,this.y,this.w,this.h);
+        btns.strokeStyle = "white";
+        btns.lineWidth = "2";
+        btns.strokeRect(this.x,this.y,this.w,this.h);
 
-        ctx.font = "18px Arial, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStlye = "white";
-        ctx.fillText("Clear", this.x, this.y );
+        btns.font = "18px Arial, sans-serif";
+        btns.textAlign = "center";
+        btns.textBaseline = "middle";
+        btns.fillStyle = "white";
+        btns.fillText("Reset", this.x+35, this.y+15 );
     }
-};*/
+};
 
 function keypress(e) { //e is event given by listener
     switch (e.which) {
@@ -144,3 +169,17 @@ function keypress(e) { //e is event given by listener
     }
 };
 
+function btnClick(e) {
+    //Store mouse positions
+    var mx = e.offsetX;
+
+    //Click start button
+    if(mx >= clearBtn.x && mx <= (clearBtn.x + clearBtn.w)) {
+        main();
+    }
+};
+
+function trackPosition(e) {
+    mouse.x = e.pageX;
+    mouse.y = e.pageY;
+}
