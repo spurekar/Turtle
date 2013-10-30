@@ -1,6 +1,11 @@
+;
+
+turnflag = false;
+deg = 0;
+
 function main() {
     init();
-    player.draw();
+    gameLoop();
 };
 
 
@@ -11,13 +16,29 @@ function init() {
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
     canvas.height = H;
-    canvas.width = W;
+    canvas.width = H;
     ctx.fillStyle = "#2E2E2E";
-    ctx.fillRect(0,0,W,H);
+    ctx.fillRect(0,0,H,H);
 
     player = new Player();
 
     addEventListener('keydown', keypress, false);
+};
+
+function gameLoop() {
+    draw();
+    setTimeout(gameLoop, 100);
+};
+
+function draw() {
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+    ctx.fillStyle = "#2E2E2E";
+    ctx.fillRect(0,0,canvas.width, canvas.height);
+    ctx.rotate(deg*Math.PI/180);
+
+    player.draw();
+
+    ctx.restore();
 };
 
 var Player = function() {
@@ -27,42 +48,45 @@ var Player = function() {
     this.draw = function() {
         var img = new Image();
         img.src = 'Turtle.png';
-        ctx.drawImage(img,xpos,ypos);
+        ctx.drawImage(img,xpos-img.width/2,ypos-img.height/2);
     }
 
-    this.moveLeft = function() {
+    this.moveLeft = function(dist) {
+        xpos -= dist;
         console.log("left");
     }
-    this.moveRight = function() {
+    this.moveRight = function(dist) {
+        xpos += dist;
         console.log("right");
     }
-    this.moveForward = function() {
+    this.moveForward = function(dist) {
+        ypos -= dist;
         console.log("forward");
     }
-    this.moveReverse = function() {
+    this.moveReverse = function(dist) {
+        ypos += dist;
         console.log("reverse");
-    }
-    this.moveTurn = function() {
-        console.log("turn");
     }
 };
 
 function keypress(e) { //e is event given by listener
     switch (e.which) {
         case 37: //left arrow
-            player.moveLeft();
+            player.moveLeft(20);
             break;
         case 38: //up arrow
-            player.moveForward();
+            player.moveForward(20);
             break;
         case 39: //right arrow
-            player.moveRight();
+            player.moveRight(20);
             break;
         case 40: //down arrow
-            player.moveReverse();
+            player.moveReverse(20);
             break;
         case 32: //spacebar
-            player.moveTurn();
+            turnflag = true;
+            deg += 90;
+            console.log("turn" + deg);
             break;
         default:
             break;
