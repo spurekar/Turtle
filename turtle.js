@@ -34,7 +34,10 @@ function draw() {
     ctx.clearRect(0,0,canvas.width, canvas.height);
     ctx.fillStyle = "#2E2E2E";
     ctx.fillRect(0,0,canvas.width, canvas.height);
+    ctx.translate(player.xpos,player.ypos);
     ctx.rotate(deg*Math.PI/180);
+    deg = 0;
+    ctx.translate(-player.xpos,-player.ypos);
 
     player.draw();
 
@@ -42,29 +45,29 @@ function draw() {
 };
 
 var Player = function() {
-    var xpos = canvas.width/2;
-    var ypos = canvas.height/2;
+    this.xpos = canvas.width/2;
+    this.ypos = canvas.height/2;
 
     this.draw = function() {
         var img = new Image();
         img.src = 'Turtle.png';
-        ctx.drawImage(img,xpos-img.width/2,ypos-img.height/2);
+        ctx.drawImage(img,this.xpos-img.width/2,this.ypos-img.height/2);
     }
 
     this.moveLeft = function(dist) {
-        xpos -= dist;
+        this.xpos -= dist;
         console.log("left");
     }
     this.moveRight = function(dist) {
-        xpos += dist;
+        this.xpos += dist;
         console.log("right");
     }
     this.moveForward = function(dist) {
-        ypos -= dist;
+        this.ypos -= dist;
         console.log("forward");
     }
     this.moveReverse = function(dist) {
-        ypos += dist;
+        this.ypos += dist;
         console.log("reverse");
     }
 };
