@@ -64,12 +64,18 @@ function gameLoop() {
 };
 
 function draw() {
-    ctx.clearRect(0,0,canvas.width, canvas.height);
+    //ctx.clearRect(0,0,canvas.width, canvas.height);
     ctx.fillStyle = "#2E2E2E";
     ctx.fillRect(0,0,canvas.width, canvas.height);
-    ctx.translate(player.xpos,player.ypos);
+    ctx.strokeStyle = "green";
+    ctx.strokeRect(0,0,canvas.width,canvas.height);
+
+    /*ctx.fillStyle= "white";
+    ctx.fillRect(10,10,100,100);
+    ctx.save();*/
 
     //handle turns by rotating canvas
+    ctx.translate(player.xpos,player.ypos);
     ctx.rotate(deg*Math.PI/180);
     deg = 0;
     ctx.translate(-player.xpos,-player.ypos);
@@ -92,6 +98,7 @@ function draw() {
 var Player = function() {
     this.xpos = canvas.width/2;
     this.ypos = canvas.height/2;
+    this.deg = 0;
 
     this.draw = function() {
         var img = new Image();
@@ -151,7 +158,7 @@ function keypress(e) { //e is event given by listener
             player.moveReverse(20);
             break;
         case 32: //spacebar
-            deg += 90;
+            deg += 45;
             console.log("turn");
             break;
         case 80: //p
