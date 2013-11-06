@@ -71,18 +71,18 @@ function draw() {
     ctx.strokeRect(0,0,canvas.width,canvas.height);
 
     //handle turns by rotating canvas
-    if (rotate != 0) {
-        ctx.translate(player.xpos,player.ypos);
-        ctx.rotate(rotate);
-        ctx.translate(-player.xpos,-player.ypos);
-        rotate = 0;
-    };
-   
+    ctx.translate(player.xpos,player.ypos);
+    ctx.rotate(degToRad(player.angle));
+     
     //draw turtle
     player.draw();
+
+    ctx.rotate(degToRad(-player.angle));
+    ctx.translate(-player.xpos,-player.ypos);
+   
     
     if (pendown == true) {
-    //draw path
+        //draw path
         ctx.lineTo(player.xpos,player.ypos);
     }
     ctx.stroke();
@@ -101,7 +101,7 @@ var Player = function() {
     this.draw = function() {
         var img = new Image();
         img.src = 'Turtle.png';
-        ctx.drawImage(img,this.xpos-img.width/2,this.ypos-img.height/2);
+        ctx.drawImage(img,-img.width/2,-img.height/2);
     }
 
 };
@@ -109,14 +109,21 @@ var Player = function() {
 Player.prototype= {
     turnTurtle:function(direction) {
         this.angle += {
-            "right": -90, "left": 90
+            "right": 45, "left": -45
         }[direction]
         rotate = this.angle;
         console.log(this.angle);
     },
 
     SPEED: 10,
-    move: function() {
+    moveForward: function() {
+        var vec = angleToVector(this.angle);
+        this.xpos += vec.x * this.SPEED;
+        this.ypos += vec.y * this.SPEED;
+        console.log(this.xpos,this.ypos,this.angle);
+    },
+
+    moveBack: function() {
         var vec = angleToVector(this.angle);
         this.xpos += vec.x * this.SPEED;
         this.ypos += vec.y * this.SPEED;
@@ -173,7 +180,7 @@ function keypress(e) { //e is event given by listener
             console.log("left");
             break;
         case 38: //up arrow
-            player.move();
+            player.moveForward();
             console.log("forward");
             break;
         case 39: //right arrow
@@ -181,7 +188,7 @@ function keypress(e) { //e is event given by listener
             console.log("right");
             break;
         case 40: //down arrow
-            player.move;
+            player.moveBack();
             console.log("backward");
             break;
         case 32: //spacebar
