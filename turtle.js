@@ -1,7 +1,7 @@
 ;
 
 pendown = true;
-deg = 0;
+rotate = 0;
 mouse = {};
 
 window.requestAnimFrame = (function () {
@@ -70,16 +70,15 @@ function draw() {
     ctx.strokeStyle = "green";
     ctx.strokeRect(0,0,canvas.width,canvas.height);
 
-    /*ctx.fillStyle= "white";
-    ctx.fillRect(10,10,100,100);
-    ctx.save();*/
 
     //handle turns by rotating canvas
-    ctx.translate(player.xpos,player.ypos);
-    ctx.rotate(deg*Math.PI/180);
-    deg = 0;
-    ctx.translate(-player.xpos,-player.ypos);
-
+    if (rotate != 0) {
+        ctx.translate(player.xpos,player.ypos);
+        ctx.rotate(rotate);
+        ctx.translate(-player.xpos,-player.ypos);
+        rotate = 0;
+    };
+   
     //draw turtle
     player.draw();
     
@@ -98,7 +97,7 @@ function draw() {
 var Player = function() {
     this.xpos = canvas.width/2;
     this.ypos = canvas.height/2;
-    this.deg = 0;
+    this.angle = 0;
 
     this.draw = function() {
         var img = new Image();
@@ -106,22 +105,47 @@ var Player = function() {
         ctx.drawImage(img,this.xpos-img.width/2,this.ypos-img.height/2);
     }
 
-    this.moveLeft = function(dist) {
-        this.xpos -= dist;
-        console.log("left");
+};
+
+Player.prototype= {
+    turnTurtle:function(direction) {
+        this.angle += {
+            "right": -90, "left": 90
+        }[direction]
+        rotate = this.angle;
+        console.log(this.angle);
+    },
+
+    SPEED: 10,
+    move: function() {
+        var vec = angleToVector(this.angle);
+        this.xpos += vec.x * this.SPEED;
+        this.ypos += vec.y * this.SPEED;
+        console.log(this.xpos,this.ypos,this.angle);
     }
-    this.moveRight = function(dist) {
-        this.xpos += dist;
-        console.log("right");
-    }
-    this.moveForward = function(dist) {
-        this.ypos -= dist;
-        console.log("forward");
-    }
-    this.moveReverse = function(dist) {
-        this.ypos += dist;
-        console.log("reverse");
-    }
+};
+
+var angleToVector = function(angle) {
+    var r = degToRad(angle);
+    var x = -Math.sin(r);
+    var y = -Math.cos(r);
+    var normVec = this.normalize({x:x, y:y});
+    return normVec;
+};
+
+var magnitude = function(vector) {
+    return Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+};
+
+var normalize = function(vector) {
+    return {
+        x: vector.x/magnitude(vector),
+        y: vector.y/magnitude(vector)
+    };
+};
+
+var degToRad = function(degrees) {
+    return degrees*Math.PI/180;
 };
 
 clearBtn = {
@@ -146,20 +170,23 @@ clearBtn = {
 function keypress(e) { //e is event given by listener
     switch (e.which) {
         case 37: //left arrow
-            player.moveLeft(20);
+            player.turnTurtle("left");
+            console.log("left");
             break;
         case 38: //up arrow
-            player.moveForward(20);
+            player.move();
+            console.log("forward");
             break;
         case 39: //right arrow
-            player.moveRight(20);
+            player.turnTurtle("right");
+            console.log("right");
             break;
         case 40: //down arrow
-            player.moveReverse(20);
+            player.move;
+            console.log("backward");
             break;
         case 32: //spacebar
-            deg += 45;
-            console.log("turn");
+            console.log("nothing");
             break;
         case 80: //p
             if (pendown== true) {
