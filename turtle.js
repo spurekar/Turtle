@@ -70,7 +70,6 @@ function draw() {
     ctx.strokeStyle = "green";
     ctx.strokeRect(0,0,canvas.width,canvas.height);
 
-
     //handle turns by rotating canvas
     if (rotate != 0) {
         ctx.translate(player.xpos,player.ypos);
