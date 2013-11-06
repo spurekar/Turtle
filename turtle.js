@@ -1,7 +1,6 @@
 ;
 
 pendown = true;
-rotate = 0;
 mouse = {};
 
 window.requestAnimFrame = (function () {
@@ -64,11 +63,9 @@ function gameLoop() {
 };
 
 function draw() {
-    //ctx.clearRect(0,0,canvas.width, canvas.height);
+    //Create empty canvas
     ctx.fillStyle = "#2E2E2E";
     ctx.fillRect(0,0,canvas.width, canvas.height);
-    ctx.strokeStyle = "green";
-    ctx.strokeRect(0,0,canvas.width,canvas.height);
 
     //handle turns by rotating canvas
     ctx.translate(player.xpos,player.ypos);
@@ -77,6 +74,7 @@ function draw() {
     //draw turtle
     player.draw();
 
+    //rotate back
     ctx.rotate(degToRad(-player.angle));
     ctx.translate(-player.xpos,-player.ypos);
    
@@ -125,15 +123,15 @@ Player.prototype= {
 
     moveBack: function() {
         var vec = angleToVector(this.angle);
-        this.xpos += vec.x * this.SPEED;
-        this.ypos += vec.y * this.SPEED;
+        this.xpos -= vec.x * this.SPEED;
+        this.ypos -= vec.y * this.SPEED;
         console.log(this.xpos,this.ypos,this.angle);
     }
 };
 
 var angleToVector = function(angle) {
     var r = degToRad(angle);
-    var x = -Math.sin(r);
+    var x = Math.sin(r);
     var y = -Math.cos(r);
     var normVec = this.normalize({x:x, y:y});
     return normVec;
