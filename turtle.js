@@ -21,7 +21,6 @@ function main() {
     gameLoop();
 };
 
-
 function init() {
     H = window.innerHeight-50;
     W = window.innerWidth-50;
@@ -34,13 +33,13 @@ function init() {
     ctx.fillStyle = "#2E2E2E";
     ctx.fillRect(0,0,H,H);
 
-    //Set up button canvas
+   /* //Set up button canvas
     btncnvs = document.getElementById("btncnvs");
     var tempstr = "-" + (canvas.height +4) + "px";
     btncnvs.style.top = tempstr;
     btns = btncnvs.getContext("2d");
     btncnvs.height = H;
-    btncnvs.width = H;
+    btncnvs.width = H;*/
     
     //Create player
     player = new Player();
@@ -48,13 +47,13 @@ function init() {
     //Set up path drawing
     ctx.beginPath();
     ctx.moveTo(player.xpos,player.ypos);
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = "green";
     ctx.lineWidth = 2;
 
     //Capture key presses
     addEventListener('keydown', keypress, false);
-    btncnvs.addEventListener('mousemove', trackPosition, false);
-    btncnvs.addEventListener('mousedown', btnClick, false);
+    addEventListener('mousemove', trackPosition, false);
+    addEventListener('mousedown', btnClick, false);
 };
 
 function gameLoop() {
@@ -66,6 +65,7 @@ function draw() {
     //Create empty canvas
     ctx.fillStyle = "#2E2E2E";
     ctx.fillRect(0,0,canvas.width, canvas.height);
+    ctx.strokeStyle = "green";
 
     //handle turns by rotating canvas
     ctx.translate(player.xpos,player.ypos);
@@ -88,7 +88,7 @@ function draw() {
     clearBtn.draw();
 
     ctx.restore();
-    btns.restore();
+    //btns.restore();
 };
 
 var Player = function() {
@@ -159,15 +159,15 @@ clearBtn = {
     y: 10,
 
     draw: function() {
-        btns.strokeStyle = "white";
-        btns.lineWidth = "2";
-        btns.strokeRect(this.x,this.y,this.w,this.h);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = "2";
+        ctx.strokeRect(this.x,this.y,this.w,this.h);
 
-        btns.font = "18px Arial, sans-serif";
-        btns.textAlign = "center";
-        btns.textBaseline = "middle";
-        btns.fillStyle = "white";
-        btns.fillText("Reset", this.x+35, this.y+15 );
+        ctx.font = "18px Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "white";
+        ctx.fillText("Reset", this.x+35, this.y+15 );
     }
 };
 
@@ -210,6 +210,7 @@ function keypress(e) { //e is event given by listener
 function btnClick(e) {
     //Store mouse positions
     var mx = e.offsetX;
+    console.log(mx,clearBtn.x);
 
     //Click start button
     if(mx >= clearBtn.x && mx <= (clearBtn.x + clearBtn.w)) {
@@ -221,3 +222,4 @@ function trackPosition(e) {
     mouse.x = e.pageX;
     mouse.y = e.pageY;
 }
+
