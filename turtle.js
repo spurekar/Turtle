@@ -22,8 +22,8 @@ function main() {
 };
 
 function init() {
-    H = window.innerHeight-50;
-    W = window.innerWidth-50;
+    H = window.innerWidth/2;
+    W = window.innerWidth/2;
 
     //Set up main canvas
     canvas = document.getElementById("canvas");
@@ -33,14 +33,6 @@ function init() {
     ctx.fillStyle = "#2E2E2E";
     ctx.fillRect(0,0,H,H);
 
-   /* //Set up button canvas
-    btncnvs = document.getElementById("btncnvs");
-    var tempstr = "-" + (canvas.height +4) + "px";
-    btncnvs.style.top = tempstr;
-    btns = btncnvs.getContext("2d");
-    btncnvs.height = H;
-    btncnvs.width = H;*/
-    
     //Create player
     player = new Player();
 
@@ -53,7 +45,10 @@ function init() {
     //Capture key presses
     addEventListener('keydown', keypress, false);
     addEventListener('mousemove', trackPosition, false);
-    addEventListener('mousedown', btnClick, false);
+    addEventListener('mousedown', startDrag, false);
+    addEventListener('mouseup',stopDrag,false);
+    //document.onmousedown=startDrag;
+    //document.onmousedown=stopDrag;
 };
 
 function gameLoop() {
@@ -88,20 +83,19 @@ function draw() {
     clearBtn.draw();
 
     ctx.restore();
-    //btns.restore();
 };
 
 var Player = function() {
     this.xpos = canvas.width/2;
     this.ypos = canvas.height/2;
     this.angle = 0;
+    this.img;
 
     this.draw = function() {
-        var img = new Image();
-        img.src = 'Turtle.png';
-        ctx.drawImage(img,-img.width/2,-img.height/2);
+        this.img = new Image();
+        this.img.src = 'Turtle.png';
+        ctx.drawImage(this.img,-this.img.width/2,-this.img.height/2);
     }
-
 };
 
 Player.prototype= {
@@ -221,5 +215,5 @@ function btnClick(e) {
 function trackPosition(e) {
     mouse.x = e.pageX;
     mouse.y = e.pageY;
-}
+};
 
