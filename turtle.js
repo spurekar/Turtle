@@ -23,7 +23,7 @@ function main() {
 
 function init() {
     H = window.innerWidth/2;
-    W = window.innerWidth/2;
+    W = window.innerHeight/2;
 
     //Set up main canvas
     canvas = document.getElementById("canvas");
@@ -62,6 +62,8 @@ function draw() {
     ctx.fillRect(0,0,canvas.width, canvas.height);
     ctx.strokeStyle = "green";
 
+    ctx.save();
+
     //handle turns by rotating canvas
     ctx.translate(player.xpos,player.ypos);
     ctx.rotate(degToRad(player.angle));
@@ -72,7 +74,6 @@ function draw() {
     //rotate back
     ctx.rotate(degToRad(-player.angle));
     ctx.translate(-player.xpos,-player.ypos);
-   
     
     if (pendown == true) {
         //draw path
@@ -89,11 +90,10 @@ var Player = function() {
     this.xpos = canvas.width/2;
     this.ypos = canvas.height/2;
     this.angle = 0;
-    this.img;
+    this.img = new Image();
+    this.img.src = 'Turtle.png';
 
     this.draw = function() {
-        this.img = new Image();
-        this.img.src = 'Turtle.png';
         ctx.drawImage(this.img,-this.img.width/2,-this.img.height/2);
     }
 };
