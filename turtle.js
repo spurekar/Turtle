@@ -4,15 +4,15 @@ pendown = true;
 mouse = {};
 
 window.requestAnimFrame = (function () {
-    return window.requestAnimationFrame || 
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame || 
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    function( callback ){ 
+        return window.requestAnimationFrame || 
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame || 
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function( callback ){ 
         return window.setTimeout(callback,1000/60); 
-    }; 
-})();
+        }; 
+        })();
 
 function main() {
     H = 0;
@@ -42,13 +42,13 @@ function init() {
     ctx.strokeStyle = "green";
     ctx.lineWidth = 2;
 
-   /* //Create dragging elements
-    forward = new Dragger();
-    forward.img = document.getElementById("forward");
-    forward.img.addEventListener('mousedown', forward.startDrag, false);
-    reverse = new Dragger();
-    reverse.img = document.getElementById("reverse"); 
-*/
+    /* //Create dragging elements
+       forward = new Dragger();
+       forward.img = document.getElementById("forward");
+       forward.img.addEventListener('mousedown', forward.startDrag, false);
+       reverse = new Dragger();
+       reverse.img = document.getElementById("reverse"); 
+     */
 
     //Capture key presses
     addEventListener('keydown', keypress, false);
@@ -71,14 +71,14 @@ function draw() {
     //handle turns by rotating canvas
     ctx.translate(player.xpos,player.ypos);
     ctx.rotate(degToRad(player.angle));
-     
+
     //draw turtle
     player.draw();
 
     //rotate back
     ctx.rotate(degToRad(-player.angle));
     ctx.translate(-player.xpos,-player.ypos);
-    
+
     if (pendown == true) {
         //draw path
         ctx.lineTo(player.xpos,player.ypos);
@@ -108,28 +108,27 @@ var Player = function() {
 };
 
 Player.prototype= {
-    turnTurtle:function(direction) {
-        this.angle += {
-            "right": 90, "left": -90
-        }[direction]
-        rotate = this.angle;
-        console.log(this.angle);
-    },
+    turnTurtle:function(direction,callback) {
+               this.angle += {
+                   "right": 90, "left": -90
+               }[direction]
+               rotate = this.angle;
+               console.log(this.angle);
+           },
 
-    SPEED: 10,
-    moveForward: function() {
-        var vec = angleToVector(this.angle);
-        this.xpos += vec.x * this.SPEED;
-        this.ypos += vec.y * this.SPEED;
-        console.log(this.xpos,this.ypos,this.angle);
-    },
+    moveForward: function(SPEED,callback) {
+                 var vec = angleToVector(this.angle);
+                 this.xpos += vec.x * SPEED;
+                 this.ypos += vec.y * SPEED;
+                 console.log(this.xpos,this.ypos,this.angle);
+             },
 
-    moveBack: function() {
-        var vec = angleToVector(this.angle);
-        this.xpos -= vec.x * this.SPEED;
-        this.ypos -= vec.y * this.SPEED;
-        console.log(this.xpos,this.ypos,this.angle);
-    }
+    moveBack: function(SPEED) {
+              var vec = angleToVector(this.angle);
+              this.xpos -= vec.x * SPEED;
+              this.ypos -= vec.y * SPEED;
+              console.log(this.xpos,this.ypos,this.angle);
+          }
 };
 
 var angleToVector = function(angle) {
@@ -146,8 +145,8 @@ var magnitude = function(vector) {
 
 var normalize = function(vector) {
     return {
-        x: vector.x/magnitude(vector),
-        y: vector.y/magnitude(vector)
+x: vector.x/magnitude(vector),
+       y: vector.y/magnitude(vector)
     };
 };
 
@@ -156,117 +155,117 @@ var degToRad = function(degrees) {
 };
 
 clearBtn = {
-    w: 80,
-    h: 30,
-    x: 10,
-    y: 10,
+w: 80,
+   h: 30,
+   x: 10,
+   y: 10,
 
-    draw: function() {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = "2";
-        ctx.strokeRect(this.x,this.y,this.w,this.h);
+   draw: function() {
+       ctx.strokeStyle = "white";
+       ctx.lineWidth = "2";
+       ctx.strokeRect(this.x,this.y,this.w,this.h);
 
-        ctx.font = "18px Arial, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "white";
-        ctx.fillText("Reset", this.x+40, this.y+15 );
-    }
+       ctx.font = "18px Arial, sans-serif";
+       ctx.textAlign = "center";
+       ctx.textBaseline = "middle";
+       ctx.fillStyle = "white";
+       ctx.fillText("Reset", this.x+40, this.y+15 );
+   }
 };
 
 forwardBtn = {
-    w: 80,
-    h: 30,
-    x: 10,
-    y: 50,
+w: 80,
+   h: 30,
+   x: 10,
+   y: 50,
 
-    draw: function() {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = "2";
-        ctx.strokeRect(this.x,this.y,this.w,this.h);
+   draw: function() {
+       ctx.strokeStyle = "white";
+       ctx.lineWidth = "2";
+       ctx.strokeRect(this.x,this.y,this.w,this.h);
 
-        ctx.font = "18px Arial, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "white";
-        ctx.fillText("Forward", this.x+40, this.y+15 );
-    }
+       ctx.font = "18px Arial, sans-serif";
+       ctx.textAlign = "center";
+       ctx.textBaseline = "middle";
+       ctx.fillStyle = "white";
+       ctx.fillText("Forward", this.x+40, this.y+15 );
+   }
 };
 
 reverseBtn = {
-    w: 80,
-    h: 30,
-    x: 10,
-    y: 90,
+w: 80,
+   h: 30,
+   x: 10,
+   y: 90,
 
-    draw: function() {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = "2";
-        ctx.strokeRect(this.x,this.y,this.w,this.h);
+   draw: function() {
+       ctx.strokeStyle = "white";
+       ctx.lineWidth = "2";
+       ctx.strokeRect(this.x,this.y,this.w,this.h);
 
-        ctx.font = "18px Arial, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "white";
-        ctx.fillText("Reverse", this.x+40, this.y+15 );
-    }
+       ctx.font = "18px Arial, sans-serif";
+       ctx.textAlign = "center";
+       ctx.textBaseline = "middle";
+       ctx.fillStyle = "white";
+       ctx.fillText("Reverse", this.x+40, this.y+15 );
+   }
 };
 
 rightTurnBtn = {
-    w: 80,
-    h: 30,
-    x: 10,
-    y: 130,
+w: 80,
+   h: 30,
+   x: 10,
+   y: 130,
 
-    draw: function() {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = "2";
-        ctx.strokeRect(this.x,this.y,this.w,this.h);
+   draw: function() {
+       ctx.strokeStyle = "white";
+       ctx.lineWidth = "2";
+       ctx.strokeRect(this.x,this.y,this.w,this.h);
 
-        ctx.font = "18px Arial, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "white";
-        ctx.fillText("Right 90", this.x+40, this.y+15 );
-    }
+       ctx.font = "18px Arial, sans-serif";
+       ctx.textAlign = "center";
+       ctx.textBaseline = "middle";
+       ctx.fillStyle = "white";
+       ctx.fillText("Right 90", this.x+40, this.y+15 );
+   }
 };
 
 leftTurnBtn = {
-    w: 80,
-    h: 30,
-    x: 10,
-    y: 170,
+w: 80,
+   h: 30,
+   x: 10,
+   y: 170,
 
-    draw: function() {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = "2";
-        ctx.strokeRect(this.x,this.y,this.w,this.h);
+   draw: function() {
+       ctx.strokeStyle = "white";
+       ctx.lineWidth = "2";
+       ctx.strokeRect(this.x,this.y,this.w,this.h);
 
-        ctx.font = "18px Arial, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "white";
-        ctx.fillText("Left 90", this.x+40, this.y+15 );
-    }
+       ctx.font = "18px Arial, sans-serif";
+       ctx.textAlign = "center";
+       ctx.textBaseline = "middle";
+       ctx.fillStyle = "white";
+       ctx.fillText("Left 90", this.x+40, this.y+15 );
+   }
 };
 
 spiralBtn = {
-    w: 80,
-    h: 30,
-    x: 10,
-    y: 210,
+w: 80,
+   h: 30,
+   x: 10,
+   y: 210,
 
-    draw: function() {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = "2";
-        ctx.strokeRect(this.x,this.y,this.w,this.h);
+   draw: function() {
+       ctx.strokeStyle = "white";
+       ctx.lineWidth = "2";
+       ctx.strokeRect(this.x,this.y,this.w,this.h);
 
-        ctx.font = "18px Arial, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "white";
-        ctx.fillText("Spiral", this.x+40, this.y+15 );
-    }
+       ctx.font = "18px Arial, sans-serif";
+       ctx.textAlign = "center";
+       ctx.textBaseline = "middle";
+       ctx.fillStyle = "white";
+       ctx.fillText("Spiral", this.x+40, this.y+15 );
+   }
 };
 
 
@@ -277,7 +276,7 @@ function keypress(e) { //e is event given by listener
             console.log("left");
             break;
         case 38: //up arrow
-            player.moveForward();
+            player.moveForward(10);
             console.log("forward");
             break;
         case 39: //right arrow
@@ -285,7 +284,7 @@ function keypress(e) { //e is event given by listener
             console.log("right");
             break;
         case 40: //down arrow
-            player.moveBack();
+            player.moveBack(10);
             console.log("backward");
             break;
         case 32: //spacebar
@@ -312,22 +311,49 @@ function btnClick(e) {
     var my = e.offsetY;
     console.log(mx,clearBtn.x);
 
-    //Click start button
     if(mx >= clearBtn.x && mx <= (clearBtn.x + clearBtn.w)) {
+        //Clear Screen
         if(my >= clearBtn.y && my <= (clearBtn.y + clearBtn.h)) {
             main();
         }
+        // Move forward
         if(my >= forwardBtn.y && my <= (forwardBtn.y + forwardBtn.h)) {
-            player.moveForward();
+            player.moveForward(10);
         }
+        //Move backward
         if(my >= reverseBtn.y && my <= (reverseBtn.y + reverseBtn.h)) {
-            player.moveBack();
+            player.moveBack(10);
         }
+        //Turn right
         if(my >= rightTurnBtn.y && my <= (rightTurnBtn.y + rightTurnBtn.h)) {
             player.turnTurtle("right");
         }
+        //Turn left
         if(my >= leftTurnBtn.y && my <= (leftTurnBtn.y + leftTurnBtn.h)) {
             player.turnTurtle("left");
+        }
+        //Create spiral
+        if(my >= spiralBtn.y && my <= (spiralBtn.y + spiralBtn.h)) {
+            for (var i = 1; i <= 2; i++) {
+                player.moveForward(10*i, function() {
+                    player.turnTurtle("right", function() {
+                        player.moveForward(10*i, function() {
+                            player.turnTurtle("right");
+                        });
+                    });
+                });
+                    /*player.moveForward(10*i);
+                    setTimeout( function() {
+                        player.turnTurtle("right");
+                        setTimeout( function() {
+                            player.moveForward(10*i);
+                            setTimeout( function() {
+                                player.turnTurtle("right");
+                            }, 1000);
+                        },1000);
+                    }, 1000);*/        
+                //}(i),1000);
+            }
         }
     }
 };
