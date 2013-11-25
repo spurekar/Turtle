@@ -42,13 +42,17 @@ function init() {
     ctx.strokeStyle = "green";
     ctx.lineWidth = 2;
 
+   /* //Create dragging elements
+    forward = new Dragger();
+    forward.img = document.getElementById("forward");
+    forward.img.addEventListener('mousedown', forward.startDrag, false);
+    reverse = new Dragger();
+    reverse.img = document.getElementById("reverse"); 
+*/
+
     //Capture key presses
     addEventListener('keydown', keypress, false);
-    addEventListener('mousemove', trackPosition, false);
-    addEventListener('mousedown', startDrag, false);
-    addEventListener('mouseup',stopDrag,false);
-    //document.onmousedown=startDrag;
-    //document.onmousedown=stopDrag;
+    addEventListener('mousedown', btnClick, false);
 };
 
 function gameLoop() {
@@ -82,6 +86,11 @@ function draw() {
     ctx.stroke();
 
     clearBtn.draw();
+    forwardBtn.draw();
+    reverseBtn.draw();
+    rightTurnBtn.draw();
+    leftTurnBtn.draw();
+    spiralBtn.draw();
 
     ctx.restore();
 };
@@ -101,7 +110,7 @@ var Player = function() {
 Player.prototype= {
     turnTurtle:function(direction) {
         this.angle += {
-            "right": 45, "left": -45
+            "right": 90, "left": -90
         }[direction]
         rotate = this.angle;
         console.log(this.angle);
@@ -147,7 +156,7 @@ var degToRad = function(degrees) {
 };
 
 clearBtn = {
-    w: 70,
+    w: 80,
     h: 30,
     x: 10,
     y: 10,
@@ -161,9 +170,105 @@ clearBtn = {
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = "white";
-        ctx.fillText("Reset", this.x+35, this.y+15 );
+        ctx.fillText("Reset", this.x+40, this.y+15 );
     }
 };
+
+forwardBtn = {
+    w: 80,
+    h: 30,
+    x: 10,
+    y: 50,
+
+    draw: function() {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = "2";
+        ctx.strokeRect(this.x,this.y,this.w,this.h);
+
+        ctx.font = "18px Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "white";
+        ctx.fillText("Forward", this.x+40, this.y+15 );
+    }
+};
+
+reverseBtn = {
+    w: 80,
+    h: 30,
+    x: 10,
+    y: 90,
+
+    draw: function() {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = "2";
+        ctx.strokeRect(this.x,this.y,this.w,this.h);
+
+        ctx.font = "18px Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "white";
+        ctx.fillText("Reverse", this.x+40, this.y+15 );
+    }
+};
+
+rightTurnBtn = {
+    w: 80,
+    h: 30,
+    x: 10,
+    y: 130,
+
+    draw: function() {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = "2";
+        ctx.strokeRect(this.x,this.y,this.w,this.h);
+
+        ctx.font = "18px Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "white";
+        ctx.fillText("Right 90", this.x+40, this.y+15 );
+    }
+};
+
+leftTurnBtn = {
+    w: 80,
+    h: 30,
+    x: 10,
+    y: 170,
+
+    draw: function() {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = "2";
+        ctx.strokeRect(this.x,this.y,this.w,this.h);
+
+        ctx.font = "18px Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "white";
+        ctx.fillText("Left 90", this.x+40, this.y+15 );
+    }
+};
+
+spiralBtn = {
+    w: 80,
+    h: 30,
+    x: 10,
+    y: 210,
+
+    draw: function() {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = "2";
+        ctx.strokeRect(this.x,this.y,this.w,this.h);
+
+        ctx.font = "18px Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "white";
+        ctx.fillText("Spiral", this.x+40, this.y+15 );
+    }
+};
+
 
 function keypress(e) { //e is event given by listener
     switch (e.which) {
@@ -204,11 +309,26 @@ function keypress(e) { //e is event given by listener
 function btnClick(e) {
     //Store mouse positions
     var mx = e.offsetX;
+    var my = e.offsetY;
     console.log(mx,clearBtn.x);
 
     //Click start button
     if(mx >= clearBtn.x && mx <= (clearBtn.x + clearBtn.w)) {
-        main();
+        if(my >= clearBtn.y && my <= (clearBtn.y + clearBtn.h)) {
+            main();
+        }
+        if(my >= forwardBtn.y && my <= (forwardBtn.y + forwardBtn.h)) {
+            player.moveForward();
+        }
+        if(my >= reverseBtn.y && my <= (reverseBtn.y + reverseBtn.h)) {
+            player.moveBack();
+        }
+        if(my >= rightTurnBtn.y && my <= (rightTurnBtn.y + rightTurnBtn.h)) {
+            player.turnTurtle("right");
+        }
+        if(my >= leftTurnBtn.y && my <= (leftTurnBtn.y + leftTurnBtn.h)) {
+            player.turnTurtle("left");
+        }
     }
 };
 
